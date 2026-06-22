@@ -30,6 +30,26 @@ except Exception as e:
     st.exception(e)
     st.stop()
 
+def insert_population(session, pop_id, country_code, year, fertility_rate, life_expectancy, size):
+
+    session.sql("""
+        INSERT INTO RAW.POPULATIONS (
+            POP_ID,
+            COUNTRY_CODE,
+            YEAR,
+            FERTILITY_RATE,
+            LIFE_EXPECTANCY,
+            SIZE
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, params=[
+        pop_id,
+        country_code,
+        year,
+        fertility_rate,
+        life_expectancy,
+        size
+    ]).collect()
 # -----------------------------
 # LOAD DATA (AUTO REFRESH)
 # -----------------------------
