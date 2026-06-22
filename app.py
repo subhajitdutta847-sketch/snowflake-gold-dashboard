@@ -55,8 +55,25 @@ st.subheader("📊 GDP Per Capita (2010 vs 2015)")
 
 gdp_df = filtered_df.set_index("COUNTRY_NAME")[["GDP_2010", "GDP_2015"]]
 
-st.bar_chart(gdp_df)
+# Convert wide format → long format (better for grouped bars)
+gdp_long = gdp_df.reset_index().melt(
+    id_vars="COUNTRY_NAME",
+    var_name="Year",
+    value_name="GDP"
+)
 
+import altair as alt
+
+chart = alt.Chart(gdp_long).mark_bar().encode(
+    x=alt.X("COUNTRY_NAME:N", title="Country"),
+    xOffset="Year:N",   # 👈 THIS creates side-by-side bars
+    y=alt.Y("GDP:Q", title="GDP Per Capita"),
+    color="Year:N"
+).properties(
+    width=600
+)
+
+st.altair_chart(chart, use_container_width=True)
 # -----------------------------
 # CHART 2 - POPULATION (VERTICAL)
 # -----------------------------
