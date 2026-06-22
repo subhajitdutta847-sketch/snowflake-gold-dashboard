@@ -50,6 +50,33 @@ def insert_population(session, pop_id, country_code, year, fertility_rate, life_
         life_expectancy,
         size
     ]).collect()
+
+st.subheader("➕ Insert Population Data")
+
+with st.form("insert_population_form"):
+    pop_id = st.number_input("POP_ID", step=1)
+    country_code = st.text_input("Country Code")
+    year = st.number_input("Year", step=1)
+    fertility_rate = st.number_input("Fertility Rate")
+    life_expectancy = st.number_input("Life Expectancy")
+    size = st.number_input("Population Size")
+
+    submit = st.form_submit_button("Insert Data")
+
+    if submit:
+        try:
+            insert_population(
+                session,
+                pop_id,
+                country_code,
+                year,
+                fertility_rate,
+                life_expectancy,
+                size
+            )
+            st.success("Data inserted successfully 🚀")
+        except Exception as e:
+            st.error(f"Insert failed: {e}")
 # -----------------------------
 # LOAD DATA (AUTO REFRESH)
 # -----------------------------
