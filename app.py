@@ -14,7 +14,7 @@ st.write("Live data from Snowflake GOLD layer")
 # SNOWFLAKE CONNECTION
 # -----------------------------
 connection_parameters = {
-    "account": "MU09414",
+    "account": "RMBNDYR-MI13930",
     "user": st.secrets["snowflake"]["user"],
     "password": st.secrets["snowflake"]["password"],
     "role": "ACCOUNTADMIN",
