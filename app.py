@@ -51,27 +51,41 @@ filtered_df = df[df["COUNTRY_NAME"].isin(selected)]
 # -----------------------------
 # CHART 1 - GDP (HORIZONTAL STYLE)
 # -----------------------------
+import streamlit as st
+import altair as alt
+
 st.subheader("📊 GDP Per Capita (2010 vs 2015)")
 
 gdp_df = filtered_df.set_index("COUNTRY_NAME")[["GDP_2010", "GDP_2015"]]
 
-# Convert wide format → long format (better for grouped bars)
+# Convert to long format (required for grouped bars)
 gdp_long = gdp_df.reset_index().melt(
     id_vars="COUNTRY_NAME",
     var_name="Year",
     value_name="GDP"
 )
 
-import altair as alt
+base = alt.Chart(gdp_long)
 
-chart = alt.Chart(gdp_long).mark_bar().encode(
+bar = base.mark_bar().encode(
     x=alt.X("COUNTRY_NAME:N", title="Country"),
-    xOffset="Year:N",   # 👈 THIS creates side-by-side bars
+    xOffset="Year:N",   # grouped bars
     y=alt.Y("GDP:Q", title="GDP Per Capita"),
     color="Year:N"
-).properties(
-    width=600
 )
+
+# 🔥 Add text labels on top of bars
+text = base.mark_text(
+    dy=-5,
+    color="black"
+).encode(
+    x=alt.X("COUNTRY_NAME:N"),
+    xOffset="Year:N",
+    y=alt.Y("GDP:Q"),
+    text=alt.Text("GDP:Q", format=".0f")
+)
+
+chart = (bar + text).properties(width=700)
 
 st.altair_chart(chart, use_container_width=True)
 # -----------------------------
