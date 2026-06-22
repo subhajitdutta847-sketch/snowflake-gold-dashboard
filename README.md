@@ -15,6 +15,9 @@ It demonstrates:
 - Interactive web app development using Streamlit
 
 ---
+## 📚 Data Source
+This project is based on the DataCamp course **"Joining Data in SQL"**  
+https://www.datacamp.com/learn/courses/joining-data-in-sql
 
 ## 🏗️ Architecture
 
