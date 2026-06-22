@@ -91,12 +91,44 @@ st.altair_chart(chart, use_container_width=True)
 # -----------------------------
 # CHART 2 - POPULATION (VERTICAL)
 # -----------------------------
+import streamlit as st
+import altair as alt
+
 st.subheader("👥 Population (2010 vs 2015)")
 
 pop_df = filtered_df.set_index("COUNTRY_NAME")[["POPULATION_2010", "POPULATION_2015"]]
 
-st.bar_chart(pop_df)
+# Convert wide → long format
+pop_long = pop_df.reset_index().melt(
+    id_vars="COUNTRY_NAME",
+    var_name="Year",
+    value_name="Population"
+)
 
+base = alt.Chart(pop_long)
+
+# Bars (grouped side-by-side)
+bar = base.mark_bar().encode(
+    x=alt.X("COUNTRY_NAME:N", title="Country"),
+    xOffset="Year:N",
+    y=alt.Y("Population:Q", title="Population"),
+    color="Year:N"
+)
+
+# 🔥 Value labels on bars
+text = base.mark_text(
+    dy=-5,
+    color="black"
+).encode(
+    x=alt.X("COUNTRY_NAME:N"),
+    xOffset="Year:N",
+    y=alt.Y("Population:Q"),
+    text=alt.Text("Population:Q", format=",.0f")
+)
+
+chart = (bar + text).properties(width=700)
+
+st.altair_chart(chart, use_container_width=True)
 # -----------------------------
 # DATA VIEW
 # -----------------------------
