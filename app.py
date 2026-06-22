@@ -23,7 +23,12 @@ connection_parameters = {
     "schema": "GOLD"
 }
 
-session = Session.builder.configs(connection_parameters).create()
+try:
+    session = Session.builder.configs(connection_parameters).create()
+    st.success("Connected successfully")
+except Exception as e:
+    st.exception(e)
+    st.stop()
 
 # -----------------------------
 # LOAD DATA (AUTO REFRESH)
